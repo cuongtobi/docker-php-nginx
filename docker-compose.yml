@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  app:
+    image: bitnami/php-fpm:7.4
+    container_name: app
+    restart: unless-stopped
+    volumes:
+      - /home/cuongtobi/workspace/docker-php-nginx:/app
+    networks:
+      - app-network
+  webserver:
+    depends_on:
+      - app
+    image: nginx:1.18.0-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
